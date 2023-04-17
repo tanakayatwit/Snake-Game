@@ -12,7 +12,7 @@ let setIntervalId;
 let score = 0;
 
 let highScore = localStorage.getItem("high-score") || 0;
-highScoreElement.innerText = 'High Score: ' + highScore;
+highScoreElement.innerText = `High Score: ${highScore}`;
 
 const updateFoodPosition = () => {
     foodX = Math.floor(Math.random() * 30) + 1;
@@ -30,26 +30,25 @@ const changeDirection = e => {
         velocityX = 0;
         velocityY = -1;
     }
-    else if(e.key === "ArrowDown" && velocityY != -1) {
+    else if (e.key === "ArrowDown" && velocityY != -1) {
         velocityX = 0;
         velocityY = 1;
     }
-    else if(e.key === "ArrowRight" && velocityX != -1) {
-        velocityX = 1;
+    else if (e.key === "ArrowLeft" && velocityX != 1) {
+        velocityX = -1;
         velocityY = 0;
     }
-    else if (e.key === "ArrowLeft" && velocityX != 1){
-        velocityX = -1;
+    else if (e.key === "ArrowRight" && velocityX != -1){
+        velocityX = 1;
         velocityY = 0;
     }
 }
 
-controls.forEach(button => button.andEventListener("click", () => changeDirection({
-    key: button.CDATA_SECTION_NODE.key })));
+controls.forEach(button => button.addEventListener("click", () => changeDirection({ key: button.dataset.key })));
 
 const initGame = () =>{
     if (gameOver) return handleGameOver();
-    let html = '<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>';
+    let html = `<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>`;
 
     if (snakeX === foodX && snakeY === foodY) {
         updateFoodPosition();
@@ -58,8 +57,8 @@ const initGame = () =>{
         highScore = score >= highScore ? score : highScore;
 
         localStorage.setItem("high-score", highScore);
-        scoreElement.innerText = 'Score: ${score}';
-        highScoreElement.innerText = 'High Score: ${highScore}';
+        scoreElement.innerText = `Score: ${score}`;
+        highScoreElement.innerText = `High Score: ${highScore}`;
     }
 
     snakeX += velocityX;
@@ -76,10 +75,9 @@ const initGame = () =>{
     }
 
     for (let i = 0 ; i < snakeBody.length ; i++) {
-        html += '<div class="head" style"grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}"></div>';
+        html += `<div class="head" style="grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}"></div>`;
 
-        if (i != 0 && snakeBody[0][1] === snakeBody[i][1] && 
-            snakeBody[0][0] === snakeBody[i][0]) {
+        if (i != 0 && snakeBody[0][1] === snakeBody[i][1] && snakeBody[0][0] === snakeBody[i][0]) {
                 gameOver = true;
             }
     }
